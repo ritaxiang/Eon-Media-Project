@@ -29,6 +29,7 @@ const Upload = (props) => {
 
   const handleUpload = () => {
     // Logic for uploading video goes here
+    // Post data
   };
 
   return (

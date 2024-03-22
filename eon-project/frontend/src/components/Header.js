@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/netflixNew.png"; // Ensure this is the Netflix logo or similar for your application
 import { FaSearch } from 'react-icons/fa'; // Importing the search icon
 
-const Header = () => {
+const Header = (onSearch) => {
   const [state, setState] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // State to hold search input
@@ -12,10 +12,11 @@ const Header = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
-    // Add search logic
+    if(onSearch && typeof onSearch === 'function') {
+        onSearch(searchQuery);
+    }
     setShowSearch(false);
-  };
+};
 
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -53,28 +54,30 @@ const Header = () => {
           <div className="flex-1"></div>
           
           <div className="relative">
-      {!showSearch && (
-        <button onClick={() => setShowSearch(true)} className="z-30">
-          <FaSearch className="text-white text-2xl" />
-        </button>
-      )}
-      {showSearch && (
-        <form ref={searchRef} onSubmit={handleSearch} className="flex absolute right-0 top-full">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="p-2 leading-none text-black"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            autoFocus
-          />
-          {/* Hidden submit button, you can remove this if you want to handle search on input change */}
-          <button type="submit" className="hidden">
-            Search
-          </button>
-        </form>
-      )}
-    </div>
+  <button 
+    onClick={() => setShowSearch(!showSearch)} 
+    className="z-30">
+    <FaSearch className="text-white text-2xl" />
+  </button>
+  {showSearch && (
+    <form onSubmit={handleSearch} className="flex absolute right-8 top-1 mt-[-10px] items-center"> {/* Adjust mt-[-50px] as needed */}
+      <div className="flex items-center border border-gray-300">
+        <FaSearch className="text-gray-500 mx-2" />
+        <input
+          type="text"
+          placeholder="Titles, people, genres"
+          className="p-2 leading-none text-black focus:outline-none"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+      {/* <button type="submit" className="px-4 py-2 bg-black hover:bg-opacity-90">
+        <span className="sr-only">Search</span>
+      </button> */}
+    </form>
+  )}
+</div>
+
 
 
           {/* Mobile menu toggle button */}
