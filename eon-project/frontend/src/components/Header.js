@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../assets/netflixNew.png"; // Ensure this is the Netflix logo or similar for your application
-import { FaSearch } from 'react-icons/fa'; // Importing the search icon
+import Logo from "../assets/netflixNew.png";
+import { FaSearch } from 'react-icons/fa';
 
 const Header = (onSearch) => {
   const [state, setState] = useState(false);
@@ -71,9 +71,6 @@ const Header = (onSearch) => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      {/* <button type="submit" className="px-4 py-2 bg-black hover:bg-opacity-90">
-        <span className="sr-only">Search</span>
-      </button> */}
     </form>
   )}
 </div>
@@ -86,11 +83,9 @@ const Header = (onSearch) => {
               className="text-white hover:text-gray-300 md:hidden"
               onClick={() => setState(!state)}
             >
-              {/* Your SVG toggle code */}
             </button>
           </div>
         </div>
-        {/* Rest of your nav menu code */}
       </nav>
       {state && (
         <div

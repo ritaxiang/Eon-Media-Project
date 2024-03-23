@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import Header from '../components/Header';
 import { FaUpload, FaTimes } from 'react-icons/fa';
+import Header from '../components/Header';
 
 const Upload = (props) => {
   const inputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [video, setVideo] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -11,30 +12,56 @@ const Upload = (props) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    const url = URL.createObjectURL(file);
-    setVideo(url);
-    setFilename(file.name); // Update filename state with the selected file's name
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setSelectedFile(file); // Save the selected file to state
+      setVideo(url);
+      setFilename(file.name); // Update filename state with the selected file's name
+    }
   };
 
   const handleChoose = () => {
     inputRef.current.click();
   };
 
-  const handleCancel = () => {
+  const handleCancel = () => { //when user cancels upload, this gets called
     setVideo(null);
     setTitle('');
     setDescription('');
-    setFilename(''); // Reset filename state when canceling
+    setFilename('');
+    setSelectedFile(null); 
   };
 
   const handleUpload = () => {
-    // Logic for uploading video goes here
-    // Post data
+    if (!selectedFile || !title || !description) {
+      alert('Please fill in all fields and select a file');
+      return;
+    }
+
+    const data = new FormData();
+    data.append('video', selectedFile);
+    data.append('title', title);
+    data.append('description', description);
+
+    fetch('http://localhost:5050/upload', {
+      method: 'POST',
+      body: data,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      alert('Upload successful');
+      handleCancel(); // Reset the form after successful upload
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Upload failed');
+    });
   };
 
   return (
     <div className="bg-gray-900 text-white min-h-screen">
-      <Header />
+      <Header/>
       <div className="flex flex-col items-center justify-center py-12 space-y-6">
         <input
           ref={inputRef}
@@ -52,8 +79,8 @@ const Upload = (props) => {
               />
               <video
                 className="mt-4 rounded shadow-lg mx-auto"
-                width="480" // Adjust width as desired
-                height="270" // Adjust height as desired
+                width="480" 
+                height="270"
                 controls
                 src={video}
               />
@@ -80,7 +107,7 @@ const Upload = (props) => {
                 />
               </div>
               
-              <div className="mt-4 text-gray-400">Filename: {filename}</div> {/* Display filename */}
+              <div className="mt-4 text-gray-400">Filename: {filename} </div>
               
               <div className="flex items-center justify-end mt-4">
               <button

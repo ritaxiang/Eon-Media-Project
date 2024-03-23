@@ -1,5 +1,4 @@
-import NavBar from './components/Header';
-import SearchBar from './components/SearchBar';
+
 import { useState } from 'react';
 import './index.css';
 // import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';

@@ -7,9 +7,9 @@ const Carousel = ({ videos }) => {
 
   const scroll = (direction) => {
     if (direction === 'left') {
-      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' }); // Scrolls left
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' }); 
     } else {
-      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' }); // Scrolls right
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' }); 
     }
   };
 

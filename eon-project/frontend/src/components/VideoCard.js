@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { FaPlay } from 'react-icons/fa'; // Make sure to install react-icons
+import { FaPlay } from 'react-icons/fa';
 
 const VideoCard = ({ video }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div 
-      className="relative w-64 h-36" // Set your desired width and height
+      className="relative w-64 h-36"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -16,7 +16,6 @@ const VideoCard = ({ video }) => {
           <button className="p-2 rounded-full bg-red-600">
             <FaPlay className="text-white" />
           </button>
-          {/* Assuming video.preview is the video preview component */}
           {video.preview} 
         </div>
       )}
