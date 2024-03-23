@@ -20,6 +20,7 @@ mongoose.connect(mongoURI)
       bucketName: 'uploads'
     });
 
+    //for upload
     app.post('/upload', (req, res) => {
       if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
@@ -55,6 +56,7 @@ mongoose.connect(mongoURI)
       uploadStream.end(videoUpload.data);
     });
 
+    //for getting all the uploaded videos
     app.get('/videos', async (req, res) => {
       try {
         const videos = await Video.find({});
@@ -65,6 +67,8 @@ mongoose.connect(mongoURI)
       }
     });
 
+
+    //for getting uploaded videos by searching the title
     app.get('/video/search/:title', async (req, res) => {
       try {
         const title = req.params.title;
@@ -84,6 +88,7 @@ mongoose.connect(mongoURI)
       }
     });
 
+    //for getting videos using filename
     app.get('/video/:filename', (req, res) => {
       const filename = req.params.filename;
       const bucket = new GridFSBucket(db, {
