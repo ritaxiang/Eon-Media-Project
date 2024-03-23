@@ -55,6 +55,16 @@ mongoose.connect(mongoURI)
       uploadStream.end(videoUpload.data);
     });
 
+    app.get('/videos', async (req, res) => {
+      try {
+        const videos = await Video.find({});
+        res.json({ videos });
+      } catch (err) {
+        console.error("Error fetching videos:", err);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    });
+
     app.get('/video/search/:title', async (req, res) => {
       try {
         const title = req.params.title;
