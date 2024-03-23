@@ -123,14 +123,18 @@ const Upload = (props) => {
           </div>
         )}
         {!video && (
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-gray-400 mb-2">Click to upload</p>
+          <p className="text-gray-500 mb-10">Your videos will be private until you publish them.</p>
           <button
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="text-white font-semibold py-2 px-8 border border-white rounded-full hover:bg-white hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition duration-300 ease-in-out"
             type="button"
             onClick={handleChoose}
           >
-            Upload Video
+            UPLOAD VIDEO
           </button>
-        )}
+        </div>
+      )}
       </div>
     </div>
   );
