@@ -1,24 +1,41 @@
 import React, { useState } from 'react';
-import { FaPlay } from 'react-icons/fa';
 
 const VideoCard = ({ video }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const videoSrc = `http://localhost:5050/video/${encodeURIComponent(video.filename)}`;
+
   return (
-    <div 
-      className="relative w-64 h-36"
+    <div
+      className="relative w-64"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" />
-      {isHovered && (
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <button className="p-2 rounded-full bg-red-600">
-            <FaPlay className="text-white" />
-          </button>
-          {video.preview} 
+      {/* Video element with poster attribute for the thumbnail */}
+      <div className="h-36 overflow-hidden"> 
+        <video
+          src={videoSrc}
+          className="w-full h-full object-cover"
+          autoPlay={isHovered} // Autoplay only when hovered
+          loop
+          muted 
+          poster={video.thumbnail} 
+        ></video>
+      </div>
+      
+      {!isHovered && (
+        <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300">
+          <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
         </div>
       )}
+
+      {/* Title and Description */}
+      <div className="px-2 py-2 bg-gray-900 bg-opacity-80">
+        <h3 className="text-white text-lg font-bold">{video.title}</h3>
+        <p className="text-white text-sm">{video.description}</p>
+      </div>
     </div>
   );
 };

@@ -1,92 +1,28 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from "../components/Header";
 import Carousel from "../components/Carousel";
-import { Link } from "react-router-dom";
-import { useGetVideos } from "../hooks/query";
-import YouTube from 'react-youtube';
-
-
-const VideoPreview = ({ video }) => {
-    const videoId = video.url.split('/')[3];
-    return (
-        <div className="video-preview">
-            <h3>{video.title}</h3>
-            <img src={video.thumbnail} alt={`${video.title} thumbnail`} />
-            <YouTube videoId={videoId} opts={{ width: '100%', height: '700px', }} /> 
-        </div>
-    );
-};
+import { FaPlay, FaInfoCircle } from 'react-icons/fa';
 
 const Homepage = () => {
-    // Dummy data for videos before connecting to backend (will remove after)
-    const [videos] = useState([
-        {
-            id: 1,
-            title: 'Celebrity',
-            thumbnail: 'path_to_celebrity_thumbnail.jpg',
-            url: 'https://youtu.be/L_HPLvZbfiU?si=Lzg1tHcnDX7BoE32',
-        },
-        {
-            id: 2,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/L_HPLvZbfiU?si=Lzg1tHcnDX7BoE32',
-        },
-        {
-            id: 3,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/PSN2wXYoQx8?si=bKGVjqZOWUoeRBrw',
-        },
-        {
-            id: 4,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/PSN2wXYoQx8?si=bKGVjqZOWUoeRBrw',
-        },
-        {
-            id: 5,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/PSN2wXYoQx8?si=bKGVjqZOWUoeRBrw',
-        },
-        {
-            id: 6,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/PSN2wXYoQx8?si=bKGVjqZOWUoeRBrw',
-        },
-        {
-            id: 7,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/PSN2wXYoQx8?si=bKGVjqZOWUoeRBrw',
-        },
-        {
-            id: 8,
-            title: 'Doctor Slump',
-            thumbnail: 'path_to_doctor_slump_thumbnail.jpg',
-            url: 'https://youtu.be/PSN2wXYoQx8?si=bKGVjqZOWUoeRBrw',
-        },
-        // Add more video objects here...
-    ]);
-
-
+    const [videos, setVideos] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [filteredVideos, setFilteredVideos] = useState(videos);
-    const [selectedVideo, setSelectedVideo] = useState(null);
-
-    const getRandomVideo = (videosArray) => {
-        return videosArray[Math.floor(Math.random() * videosArray.length)];
-    };
+    const [filteredVideos, setFilteredVideos] = useState([]);
+    const [featuredVideo, setFeaturedVideo] = useState(null);
 
     useEffect(() => {
-        // Update the selected video when the component mounts or videos change
-        setSelectedVideo(getRandomVideo(videos));
-    }, [videos]);
+        const fetchVideos = async () => {
+            const response = await fetch('http://localhost:5050/videos');
+            const data = await response.json();
+            setVideos(data.videos);
+            setFilteredVideos(data.videos);
+            // Set a featured video if the list is not empty
+            if (data.videos.length > 0) {
+                setFeaturedVideo(data.videos[0]); // You might want to select a specific video to feature
+            }
+        };
+        fetchVideos();
+    }, []);
 
-    // This function is called when a search is performed
     const handleSearch = (query) => {
         setSearchQuery(query);
         const filtered = videos.filter(video =>
@@ -95,20 +31,48 @@ const Homepage = () => {
         setFilteredVideos(filtered);
     };
 
+    const playVideo = (video) => {
+        console.log('Playing video:', video.title);
+    };
+
     return (
-        <div className="bg-gray-900 text-white min-h-screen">
+        <div className="bg-black text-white min-h-screen"> {/* Use font-serif for a nicer font */}
             <Header onSearch={handleSearch} />
-            <div className="flex flex-col">
-                {selectedVideo && <VideoPreview video={selectedVideo} />}
-                
-                <div className="my-8">
-                    <h2 className="text-2xl mb-4">Uploaded Videos</h2>
-                    {/* Pass the filtered videos to the Carousel */}
-                    <Carousel videos={filteredVideos} />
+            {/* Featured video section */}
+            {featuredVideo && (
+                <div className="relative h-[30rem]">
+                    <img src={'https://media.cnn.com/api/v1/images/stellar/prod/170407220916-04-iconic-mountains-matterhorn-restricted.jpg?q=w_2512,h_1413,x_0,y_0,c_fill/h_618'} alt={featuredVideo.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-between p-8">
+                        <div className="space-y-4">
+                            <h2 className="text-4xl md:text-6xl font-bold">{featuredVideo.title}</h2>
+                            <p className="text-lg md:text-xl">{featuredVideo.description}</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center pb-8">
+                            <button 
+                                onClick={() => playVideo(featuredVideo)}
+                                className="text-black text-2xl px-6 py-3 bg-white hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg"
+                            >
+                                <FaPlay className="inline-block mr-2" />
+                                Play
+                            </button>
+                            <button 
+                                onClick={() => console.log('More info')}
+                                className="text-white text-2xl px-6 py-3 bg-gray-700 hover:bg-gray-600 transition duration-300 ease-in-out rounded-lg mt-4 sm:mt-0 sm:ml-4"
+                            >
+                                <FaInfoCircle className="inline-block mr-2" />
+                                More Info
+                            </button>
+                        </div>
+                    </div>
                 </div>
+            )}
+    
+            <div className="px-4 py-8">
+                <h2 className="text-3xl mb-6 font-bold">Uploaded Videos</h2>
+                <Carousel videos={filteredVideos} />
             </div>
         </div>
     );
-}
+};
 
 export default Homepage;
