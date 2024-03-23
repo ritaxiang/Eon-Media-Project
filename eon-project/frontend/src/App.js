@@ -15,11 +15,6 @@ import Upload from './pages/Upload';
 
 function App() {
 
-  const [query, setQuery] = useState("")
-
-  const handleSearch = (searchTerm) => {
-    setQuery(searchTerm)
-  }
 
   return (
     // <Router>

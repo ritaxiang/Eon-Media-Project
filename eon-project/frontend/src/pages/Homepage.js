@@ -17,7 +17,7 @@ const Homepage = () => {
             setFilteredVideos(data.videos);
             // Set a featured video if the list is not empty
             if (data.videos.length > 0) {
-                setFeaturedVideo(data.videos[0]); // You might want to select a specific video to feature
+                setFeaturedVideo(data.videos[0]); 
             }
         };
         fetchVideos();

@@ -5,9 +5,8 @@ import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 
 const Header = (onSearch) => {
-  const [value, setValue] = useState("");
   const [state, setState] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(false); //State for tracking 
   const [searchQuery, setSearchQuery] = useState(""); // State to hold search input
   const [videos, setVideos] = useState([]); // State to hold search results
   const [currentVideoSrc, setCurrentVideoSrc] = useState(""); // State for the video source URL
